@@ -97,4 +97,4 @@ if __name__ == '__main__':
         if Post.query.count() == 0:
             db.session.add(Post(author='admin', title='hello', content='world'))
             db.session.commit()
-    app.run(debug=True)
+    app.run()
