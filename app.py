@@ -1,3 +1,4 @@
+import os
 import jwt
 import bcrypt
 from flask import Flask, request, jsonify
@@ -7,7 +8,7 @@ from functools import wraps
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SECRET_KEY'] = 'change-me-in-production'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'change-me-in-production')
 db = SQLAlchemy(app)
 
 # ---------- 数据模型 ----------
