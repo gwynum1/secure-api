@@ -1,0 +1,26 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          pip install -r requirements.txt
+          pip install bandit safety
+      # ---- SAST：静态代码扫描 ----
+      - name: Bandit SAST
+        run: bandit -r app.py -f html -o bandit-report.html
+      # ---- SCA：依赖漏洞检查 ----
+      - name: Safety SCA
+        run: safety check || true
+      # ---- 上传报告工件 ----
+      - uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: bandit-report.html
